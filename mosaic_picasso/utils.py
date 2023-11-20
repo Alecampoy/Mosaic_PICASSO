@@ -1,5 +1,6 @@
 import numpy as np
-import tifffile, skimage
+import tifffile
+import skimage
 from scipy import ndimage
 import skimage.registration
 import skimage.exposure
@@ -32,7 +33,9 @@ def save_fiji(img, fname, dimension_order="TZCYX", normalization=False):
 def drift_corr(img, display=True):
     nchs = img.shape[-1]
     for i in range(1, nchs):
-        shift, _, _ = skimage.registration.phase_cross_correlation(img[:, :, 0], img[:, :, i], upsample_factor=100)
+        shift, _, _ = skimage.registration.phase_cross_correlation(
+            img[:, :, 0], img[:, :, i], upsample_factor=100
+        )
         img[:, :, i] = ndimage.shift(img[:, :, i], shift)
         if display:
             print(f"shift: {shift}, img: {img.shape}")
